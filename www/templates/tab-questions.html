@@ -1,0 +1,42 @@
+<ion-view view-title="{{navTitle}}">
+  <ion-nav-buttons side="right">
+    <button class="button button-clear" style="color:white;font-size:20px" ng-click="modeChange()">
+          <i class="fa fa-list-ol" ng-if="mode == 1"></i>
+          <i class="fa fa-list-ul" ng-if="mode == 2"></i>
+    </button>
+  </ion-nav-buttons>
+  <ion-content scroll-sista="header-tabs"  delegate-handle="agendaScrollDelegate" >
+      <ion-refresher
+      on-refresh="doRefresh()">
+     </ion-refresher>
+     <div class="list" ng-repeat="(key,question) in questions" href="#/app/playlists/{{playlist.id}}" ng-if="mode == 1">
+       <div class="item item-text-wrap" ion-affix data-affix-within-parent-with-class="list" >
+        <h2 style="font-size:18px;text-align:left" >{{key+1}}. {{question.question_title}}</h2>
+      </div>
+      <div class="item item-text-wrap" style="padding-top:0;margin-top:0;font-family:'Arial'">
+        <hr>
+        <span  style="font-size:14px">
+          #{{question.question_article.article_title}}&nbsp
+        </span>
+        <hr>
+        <div ng-if="question.question_image_url" ng-class="{'box sample':question.wrongResult || question.rightResult}">
+          <img  src="{{question.question_image_url}}" style="width:100%;height:200px">
+        </div>  
+        <div>
+          <li class="item" ng-disabled="question.checked" ng-repeat="answer in question.question_answers" ng-click="check(answer,question,key)" ng-class="{ 'selected-right': answer.id == question.rightResult.id && question.rightResult.answer_isTrue == true,'selected-wrong': question.wrongResult.answer_isTrue == false && answer.id == question.wrongResult.id }">
+            {{$index+1}}. {{answer.answer_title}} 
+          </li>
+        </div>  
+      </div>
+    </div>
+        <div class="item item-divider" id="pollquestion" ng-if="mode == 2">
+          <p>Асуултууд</p>
+        </div>
+       <div class="list" ng-repeat="(key,question) in questions" ng-if="mode == 2">
+        <a class="item item-icon-right" style="border-bottom:1px solid #f8f8f8;font-family:'m3';font-size:18px" ng-click="pollanswerOpen(question)">
+           <i class="icon ion-ios-arrow-forward"></i>
+          {{key+1}}. {{question.question_title}}
+        </a>
+      </div>
+  </ion-content>
+</ion-view>

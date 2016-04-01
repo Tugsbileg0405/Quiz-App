@@ -1,0 +1,40 @@
+<ion-view view-title="Profile">
+  <ion-content  overflow-scroll='false' delegate-handle="userDetailContent" on-scroll="onUserDetailContentScroll()" header-shrink scroll-event-interval="5">
+   <div class="about-header">
+            <div class="profile-media">
+              <div class="profile-details">
+                <img fallback-src="{{backsite}}/{{person.profile_img}}" ng-src="{{person.profile_img}}" class="img-circle profile-image">
+                <h3 class="color-white">
+                  {{person.fullname}}
+                </h3>
+                <p>
+                    {{person.email}}
+                </p>
+              </div>
+              <img ng-src="img/ag3.jpg" class="about-image profile-background-image" style="vertical-align:middle;">
+            </div>
+    </div>
+      <div class="button-bar profileInfo">
+        <a class="button">Questions</a>
+        <a class="button" ng-click="goRank()">Rank</a>
+        <a class="button" ng-click="goInfo()">Info</a>
+      </div>
+    <div class="padding">
+        <div class="list">
+          <label class="item item-input">
+            <span class="input-label">All:</span>
+            <span>{{rightResult + wrongResult}}</span>
+          </label>
+          <label class="item item-input">
+            <span class="input-label">Right:</span>
+            <span>{{rightResult}}</span>
+          </label>
+          <label class="item item-input" >
+            <span class="input-label">Wrong:</span>
+            <span>{{wrongResult}}</span>
+          </label>
+        </div>
+       <button ng-click="logout()" class="button custom-bar button-block" style="border-radius:5px">Logout</button>
+    </div>
+  </ion-content>
+</ion-view>

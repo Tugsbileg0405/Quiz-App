@@ -1,0 +1,24 @@
+<ion-view view-title="{{articleInfo.article_title}}">
+  <ion-content scroll-sista="header-tabs"  delegate-handle="agendaScrollDelegate">
+      <div class="list" ng-repeat="(key,question) in articleQuestions" >
+        <div class="item item-text-wrap" ion-affix data-affix-within-parent-with-class="list" >
+          <h2 style="font-size:18px;text-align:left" >{{question.question_title}}</h2>
+        </div>
+        <div class="item item-text-wrap" style="padding-top:0;margin-top:0;font-family:'Arial'">
+          <hr>
+          <span  style="font-size:14px">
+            #{{question.question_article.article_title}}&nbsp
+          </span>
+          <hr>
+          <div ng-if="question.question_image_url">
+            <img  src="{{question.question_image_url}}" style="width:100%;height:200px">
+          </div>  
+          <div>
+            <li class="item" ng-disabled="question.checked" ng-repeat="answer in question.question_answers" ng-click="check(answer,question,key)" ng-class="{ 'selected-right': answer.id == question.rightResult.id && question.rightResult.answer_isTrue == true,'selected-wrong': question.wrongResult.answer_isTrue == false && answer.id == question.wrongResult.id }">
+              {{$index+1}}. {{answer.answer_title}} 
+            </li>
+          </div>  
+        </div>
+    </div>
+  </ion-content>
+</ion-view>

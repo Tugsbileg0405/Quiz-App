@@ -1,0 +1,22 @@
+<ion-view>
+<ion-nav-title>
+    <span>{{categoryDetail.name}}</span>
+  </ion-nav-title>
+  <div class="bar bar-subheader" style="background-color:#f8f8f8">
+  <h2 class="title" style="text-align:left">Сэдвүүд</h2>
+</div>
+  <ion-content class="has-subheader">
+  <ion-refresher
+    on-refresh="doRefresh()">
+  </ion-refresher>
+  <div class="list">
+    <a class="item item-icon-right" ng-repeat="article in categoryDetail.articles" ng-click="goDetail(article)">
+      {{$index+1}}. {{article.article_title}}
+         <i class="icon ion-ios-arrow-forward"></i>
+    </a>
+     <a class="item" ng-if="categoryDetail.articles.length == 0">
+        Одоогоор асуулт байхгүй байна.
+    </a>  
+  </div>
+  </ion-content>
+</ion-view>

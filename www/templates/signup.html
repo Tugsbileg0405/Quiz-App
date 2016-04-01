@@ -1,0 +1,26 @@
+<ion-view view-title="Sign Up" class="loginBg">
+<ion-nav-bar class="bar-positive">
+  <ion-nav-back-button class="button-clear">
+    <i class="ion-chevron-left"></i> Back
+  </ion-nav-back-button>
+</ion-nav-bar>
+  <ion-content >
+  <div class="row responsive-sm padding remvoeBP" >
+	  <div class="col">
+		   <div class="app-logo"><img src="img/ionic.png"></div>
+		   <form>
+			<div class="list list-inset removePM">
+			  <label class="item item-input"><input type="text" ng-model="user.name" placeholder="Full Name"> </label>
+			  <label class="item item-input"><input type="email" ng-model="user.email" placeholder="Email Address"> </label>
+			  <label class="item item-input"><input type="password" ng-model="user.password" placeholder="Password"> </label>
+			</div>
+			<div class="loginButton"><button ng-click="register(user)" class="button ion-person button-block"> Register </button>  </div>
+			</form>
+	  </div>
+  </div>
+  <!-- <h1 class="or">or</h1>
+	<div class="row  padding removePM">
+	  <div class="col"> <a class="button button-block" ng-click="facebookSignIn()"><i class="icon ion-social-facebook"></i> Facebook</a> </div>
+	</div> -->
+  </ion-content>
+</ion-view>

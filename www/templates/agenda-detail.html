@@ -1,0 +1,34 @@
+<ion-view view-title="{{poll.title}}">
+<ion-content has-subheader="false">
+	 <div class="list card" id="homePage" >
+        <div style="margin-top:20px">
+          <h2>{{poll.question_title}}</h2>
+       </div>
+        <div>
+          <p>#movie #science #emoji</p>
+       </div>
+       <img class="full-image" src="https://pbs.twimg.com/profile_images/451007105391022080/iu1f7brY_400x400.png">
+            <div class="item" ng-if="showResult == false" ng-repeat="item in questions"  ng-click="getValue($index)">
+              {{ item.text }}
+            </div>
+            <div class="item" ng-if="showResult == true" style="padding-top:5px;padding-bottom:5px" ng-repeat="item in questions">
+              <div class="row" style="padding:0">
+                <div class="col col-80" id="sta" >
+                  <p style="color:#383838 " ng-model="item.id" ng-class="{'selected':$index == selectedIndex}">{{item.text}}</p>
+                  <progress  id="progressBar" value={{item.value}} max={{total}}>
+                    <span >Progress: 80%</span>
+                  </progress>
+                </div>
+                <div class="col col-20" id="procent">
+                  <p>{{Math.round(100*item.value/total)}}%</p>
+                </div>
+              </div>
+            </div>
+           <div class="button-bar" id="socialBtns">
+                <a class="button" ng-click="like()" ng-if="liked == false"><i class="fa fa-heart-o"></i></a>
+                <a class="button" ng-click="unlike()" ng-if="liked == true"><i class="fa fa-heart"></i></a>
+                <a class="button" ng-click="action()"><i class="fa fa-share-square-o"></i></a>
+           </div>
+    </div>
+</ion-content>
+</ion-view>
