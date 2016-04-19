@@ -122,6 +122,31 @@ angular.module('starter.services', [])
         return deferrred.promise;
     };
 
+    this.getArticle = function(){
+         var deferrred = $q.defer();
+        $http.get(API_URL+'/article')
+        .success(function(data){
+            deferrred.resolve(data);
+        })
+        .error(function(data){
+            deferrred.reject(data);
+        })
+        return deferrred.promise;
+    };
+
+    this.getQuestionResultByQuestion = function(data){
+        var deferrred = $q.defer();
+        $http.get(API_URL+'/questionresult?question='+data)
+        .success(function(data){
+            deferrred.resolve(data);
+        })
+        .error(function(data){
+            deferrred.reject(data);
+        })
+        return deferrred.promise;
+    }
+
+
     this.getQuestionResultByUser = function(data){
         var deferrred = $q.defer();
         $http.get(API_URL+'/questionresult?user='+data)

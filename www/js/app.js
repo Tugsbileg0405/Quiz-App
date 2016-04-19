@@ -3,10 +3,9 @@
 angular.module('starter', ['ionic','angular-svg-round-progress','starter.config','ionic-ratings','ionic.service.core','ngStorage' , 'ngCordovaOauth', 'ngCordova' ,'starter.controllers','starter.factory','starter.services', 'jett.ionic.filter.bar', 'ion-gallery', 'jett.ionic.scroll.sista', 'ngIOS9UIWebViewPatch', 'ion-affix'])
 .run(function($ionicPlatform,$rootScope,AuthService,$state,$timeout,$localStorage) {
     $ionicPlatform.ready(function() {  
-      
     setTimeout(function () {
         navigator.splashscreen.hide();
-    }, 2000);
+    }, 1000);
 
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
         // cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -18,7 +17,7 @@ angular.module('starter', ['ionic','angular-svg-round-progress','starter.config'
     }
 
   });
-    $rootScope.backsite = 'http://www.urilga.mn:1337';
+    $rootScope.backsite = 'http://www.urilga.mn:1339';
     $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams, fromState, fromStateParams) {
       if(toState.name.indexOf('tab') !== -1 ) {
         if(!AuthService.getAuthStatus()) {
@@ -39,7 +38,6 @@ angular.module('starter', ['ionic','angular-svg-round-progress','starter.config'
   $ionicFilterBarConfigProvider.placeholder('Search...');
   $ionicConfigProvider.backButton.previousTitleText(true);
   $ionicConfigProvider.backButton.text('');
-
     $stateProvider
 
     .state('tab', {

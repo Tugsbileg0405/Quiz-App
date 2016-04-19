@@ -1,5 +1,7 @@
 /* Empty. Add your own CSS if you like */
-
+#difficult {
+  float: right;
+}
 div.box
 {
   width:100%;
@@ -107,8 +109,9 @@ h2.ng-binding{
 .know{
   background-color: #00cc52;
   color:white;
-  padding: 5px 10px 5px 10px;
+  padding: 0px 10px 0px 10px;
   border-radius: 5px;
+  border:none;
 }
 #category{
   border:1px solid;
@@ -137,8 +140,9 @@ h2.ng-binding{
 .dontKnow {
   background-color: red;
   color:white;
-  padding: 5px 10px 5px 10px;
+  padding: 0px 10px 0px 10px;
   border-radius: 5px;
+  border:none;
 }
 #procent{
   text-align: center;

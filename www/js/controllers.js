@@ -4,14 +4,13 @@ angular.module('starter.controllers', [])
     // $scope.navTitle='<img class="title-image" style="height: 27px;margin-top: 8px;" src="img/logoiclubs.png" />';
     $scope.navTitle = 'Quiz';
     $scope.doRefresh = function() {
-       QuizAPI.getQuestions().then(function(response){
+           QuizAPI.getQuestions().then(function(response){
         $scope.questions = [];
         angular.forEach(response,function(data,index){
           var mydata = {};
           mydata.user = $localStorage.userdata.id;
           mydata.question = data.id;
           QuizAPI.getQuestionResult(mydata).then(function(result){
-            console.log(result);
             if(result.length > 0){
               data.checked = true;
               if(result[0].answer.answer_isTrue == true){
@@ -27,10 +26,33 @@ angular.module('starter.controllers', [])
              }
            }
          })
+          QuizAPI.getQuestionResultByQuestion(data.id).then(function(response){
+            data.total = response.length;
+            var mydata = {};
+            mydata.right = 0;
+            mydata.wrong = 0;
+            angular.forEach(response,function(data){
+              if(data.answer.answer_isTrue == true){
+                  mydata.right = mydata.right + 1;
+              }
+              else {
+                  mydata.wrong = mydata.wrong + 1;
+              }
+            })
+            data.right = mydata.right;
+            data.wrong = mydata.wrong;
+            var color = data.right/data.total*100;
+            if(color >= 50){
+              data.color = '#00cc52';
+            }
+            else {
+              data.color = 'red';
+            }
+          })
           $scope.questions.push(data);
         })
       });
-      $scope.$broadcast('scroll.refreshComplete');
+        $scope.$broadcast('scroll.refreshComplete');
     };
     $scope.doRefresh();
     $scope.check = function(answer,question,index){
@@ -54,7 +76,7 @@ angular.module('starter.controllers', [])
    }
 })
 
-.controller('articleQuestionCtrl',function($scope,$localStorage,$stateParams,QuizAPI){
+.controller('articleQuestionCtrl',function($scope,$localStorage,$stateParams,QuizAPI,$ionicScrollDelegate){
   $scope.articleInfo = $stateParams.data;
     $scope.doRefresh = function(){
       QuizAPI.getQuestionByArticle($stateParams.articleId).then(function(data){
@@ -94,7 +116,16 @@ angular.module('starter.controllers', [])
         $scope.doRefresh();
       })
     }
-
+       $scope.mode = 2;
+       $scope.modeChange = function(){
+          if($scope.mode == 1){
+            $scope.mode = 2;
+          }
+          else if($scope.mode == 2){
+            $scope.mode = 1;
+          }
+          $ionicScrollDelegate.scrollTop();
+       }
 })
 
 .controller('CategoryDetailController', function($scope,QuizAPI,$stateParams,$state) {
@@ -201,43 +232,50 @@ $scope.$on('$ionicView.beforeEnter', function (event, viewData) {
   }
 
 })
-.controller('TagsController', function($scope,$ionicFilterBar) {
+.controller('TagsController', function($scope,$ionicFilterBar,QuizAPI) {
         //$scope.$on('$ionicView.enter', function(e) {
         //});
     $scope.router = function(){
       console.log('xaxa');
     }
-        $scope.tags = [
-        {name:'Music',color:getRandomColor()},
-        {name:'Art',color:getRandomColor()},
-        {name:'Trend',color:getRandomColor()},
-        {name:'Award',color:getRandomColor()},
-        {name:'Movie',color:getRandomColor()},
-        {name:'Oscardwadwadwaawdawda',color:getRandomColor()},
-        {name:'NBA',color:getRandomColor()},
-        {name:'FIFA',color:getRandomColor()},
-        {name:'Twitter',color:getRandomColor()},
-        {name:'Facebook',color:getRandomColor()},
-        {name:'ISIS',color:getRandomColor()},
-        {name:'Crime',color:getRandomColor()}
-        ]
-        function getRandomColor() {
-          var letters = '0123456789ABCDEF'.split('');
-          var color = '#';
-          for (var i = 0; i < 6; i++ ) {
-            color += letters[Math.floor(Math.random() * 16)];
-          }
-          return color;
-        }
+    QuizAPI.getArticle().then(function(data){
+      console.log(data);
+      $scope.articles = data;
+    })
+        // $scope.tags = [
+        // {name:'Music',color:getRandomColor()},
+        // {name:'Art',color:getRandomColor()},
+        // {name:'Trend',color:getRandomColor()},
+        // {name:'Award',color:getRandomColor()},
+        // {name:'Movie',color:getRandomColor()},
+        // {name:'Oscardwadwadwaawdawda',color:getRandomColor()},
+        // {name:'NBA',color:getRandomColor()},
+        // {name:'FIFA',color:getRandomColor()},
+        // {name:'Twitter',color:getRandomColor()},
+        // {name:'Facebook',color:getRandomColor()},
+        // {name:'ISIS',color:getRandomColor()},
+        // {name:'Crime',color:getRandomColor()}
+        // ]
+        // function getRandomColor() {
+        //   var letters = '0123456789ABCDEF'.split('');
+        //   var color = '#';
+        //   for (var i = 0; i < 6; i++ ) {
+        //     color += letters[Math.floor(Math.random() * 16)];
+        //   }
+        //   return color;
+        // }
 
         $scope.showFilterBar = function () {
             filterBarInstance = $ionicFilterBar.show({
-                items: $scope.locales,
+                items: $scope.articles,
                 update: function (filteredItems, filterText) {
-                    $scope.locales = filteredItems;
                     if (filterText) {
                         console.log(filterText);
+                        $scope.filterText = filterText;
                     }
+                },
+                cancel: function(){
+                  console.log('cancel');
                 },
                 filterProperties: 'description'
             });
@@ -304,26 +342,26 @@ $scope.$on('$ionicView.beforeEnter', function (event, viewData) {
     $scope.$broadcast('userDetailContent.scroll', scrollView);
   }
 })
-.directive('headerShrink', function($document) {
-  return {
-    restrict: 'A',
-    link: function($scope, $element, $attr) {
-      var resizeFactor, scrollFactor, blurFactor;
-      var header = $document[0].body.querySelector('.about-header');
-      $scope.$on('userDetailContent.scroll', function(event,scrollView) {
-        if (scrollView.__scrollTop >= 0) {
-          scrollFactor = scrollView.__scrollTop/3.5;
-          header.style[ionic.CSS.TRANSFORM] = 'translate3d(0, +' + scrollFactor + 'px, 0)';
-        } else if (scrollView.__scrollTop > -50) {
-          resizeFactor = -scrollView.__scrollTop/100 + 0.99;
-          // blurFactor = -scrollView.__scrollTop/50;
-          header.style[ionic.CSS.TRANSFORM] = 'scale('+resizeFactor+','+resizeFactor+')';
-          // header.style.webkitFilter = 'blur('+blurFactor+'px)';
-        }
-      });
-    }
-  }
-})
+// .directive('headerShrink', function($document) {
+//   return {
+//     restrict: 'A',
+//     link: function($scope, $element, $attr) {
+//       var resizeFactor, scrollFactor, blurFactor;
+//       var header = $document[0].body.querySelector('.about-header');
+//       $scope.$on('userDetailContent.scroll', function(event,scrollView) {
+//         if (scrollView.__scrollTop >= 0) {
+//           scrollFactor = scrollView.__scrollTop/3.5;
+//           header.style[ionic.CSS.TRANSFORM] = 'translate3d(0, +' + scrollFactor + 'px, 0)';
+//         } else if (scrollView.__scrollTop > -50) {
+//           resizeFactor = -scrollView.__scrollTop/100 + 0.99;
+//           // blurFactor = -scrollView.__scrollTop/50;
+//           header.style[ionic.CSS.TRANSFORM] = 'scale('+resizeFactor+','+resizeFactor+')';
+//           // header.style.webkitFilter = 'blur('+blurFactor+'px)';
+//         }
+//       });
+//     }
+//   }
+// })
 .directive('fallbackSrc', function () {
   var fallbackSrc = {
     link: function postLink(scope, iElement, iAttrs) {
